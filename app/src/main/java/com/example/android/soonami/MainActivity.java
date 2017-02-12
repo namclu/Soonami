@@ -113,7 +113,7 @@ public class MainActivity extends AppCompatActivity {
             try {
                 jsonResponse = makeHttpRequest(url);
             } catch (IOException e) {
-                // TODO Handle the IOException
+                Log.e(LOG_TAG, "Problem making HTTP request.", e);
             }
 
             // Extract relevant fields from the JSON response and create an {@link Event} object
@@ -175,9 +175,11 @@ public class MainActivity extends AppCompatActivity {
                 if (urlConnection.getResponseCode() == 200) {
                     inputStream = urlConnection.getInputStream();
                     jsonResponse = readFromStream(inputStream);
+                } else {
+                    Log.e(LOG_TAG, "Error response code: " + urlConnection.getResponseCode());
                 }
             } catch (IOException e) {
-                // TODO: Handle the exception
+                Log.e(LOG_TAG, "Error handling openConnection() code: " + urlConnection.getResponseCode(), e);
             } finally {
                 if (urlConnection != null) {
                     urlConnection.disconnect();
@@ -218,7 +220,7 @@ public class MainActivity extends AppCompatActivity {
             if (TextUtils.isEmpty(earthquakeJSON)) {
                 return null;
             }
-            
+
             try {
                 JSONObject baseJsonResponse = new JSONObject(earthquakeJSON);
                 JSONArray featureArray = baseJsonResponse.getJSONArray("features");
